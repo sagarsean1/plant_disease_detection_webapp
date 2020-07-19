@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    <script
+      class="jsbin"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      body {
+        font-family: sans-serif;
+        background-color: #eeeeee;
+      }
+
+      .file-upload {
+        background-color: #ffffff;
+        width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .file-upload-btn {
+        width: 100%;
+        margin: 0;
+        color: #fff;
+        background: #1fb264;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        border-bottom: 4px solid #15824b;
+        transition: all 0.2s ease;
+        outline: none;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+      .pred-btn {
+        width: 50%;
+        margin: 0;
+        color: #fff;
+        background: #1fb264;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        border-bottom: 4px solid #15824b;
+        transition: all 0.2s ease;
+        outline: none;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .file-upload-btn:hover {
+        background: #1aa059;
+        color: #ffffff;
+        transition: all 0.2s ease;
+        cursor: pointer;
+      }
+
+      .file-upload-btn:active {
+        border: 0;
+        transition: all 0.2s ease;
+      }
+
+      .file-upload-content {
+        display: none;
+        text-align: center;
+      }
+
+      .file-upload-input {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        outline: none;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .image-upload-wrap {
+        margin-top: 20px;
+        border: 4px dashed #1fb264;
+        position: relative;
+      }
+
+      .image-dropping,
+      .image-upload-wrap:hover {
+        background-color: #1fb264;
+        border: 4px dashed #ffffff;
+      }
+
+      .image-title-wrap {
+        padding: 0 15px 15px 15px;
+        color: #222;
+      }
+
+      .drag-text {
+        text-align: center;
+      }
+
+      .drag-text h3 {
+        font-weight: 100;
+        text-transform: uppercase;
+        color: #15824b;
+        padding: 60px 0;
+      }
+
+      .file-upload-image {
+        max-height: 200px;
+        max-width: 200px;
+        margin: auto;
+        padding: 20px;
+      }
+
+      .remove-image {
+        width: 200px;
+        margin: 0;
+        color: #fff;
+        background: #cd4535;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        border-bottom: 4px solid #b02818;
+        transition: all 0.2s ease;
+        outline: none;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .remove-image:hover {
+        background: #c13b2a;
+        color: #ffffff;
+        transition: all 0.2s ease;
+        cursor: pointer;
+      }
+
+      .remove-image:active {
+        border: 0;
+        transition: all 0.2s ease;
+      }
+    </style>
+    <title>Plant Disease Classifier</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/">Plant Disease Predictor</a>
+    </nav>
+    <div class="container mt-3">
+      {% block content %} {% endblock %}
+    </div>
+
+    <script>
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            $(".image-upload-wrap").hide();
+
+            $(".file-upload-image").attr("src", e.target.result);
+            $(".file-upload-content").show();
+
+            $(".image-title").html(input.files[0].name);
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        } else {
+          removeUpload();
+        }
+      }
+
+      function removeUpload() {
+        $(".file-upload-input").replaceWith($(".file-upload-input").clone());
+        $(".file-upload-content").hide();
+        $(".image-upload-wrap").show();
+      }
+      $(".image-upload-wrap").bind("dragover", function () {
+        $(".image-upload-wrap").addClass("image-dropping");
+      });
+      $(".image-upload-wrap").bind("dragleave", function () {
+        $(".image-upload-wrap").removeClass("image-dropping");
+      });
+    </script>
+  </body>
+</html>

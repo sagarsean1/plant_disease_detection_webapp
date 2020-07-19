@@ -1,0 +1,86 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <div class="jumbotron mt-3" >
+
+      <form method='POST' action="{{url_for('predict')}}" enctype=multipart/form-data>
+        <div class="file-upload">
+          <button
+            class="file-upload-btn"
+            type="button"
+            onclick="$('.file-upload-input').trigger( 'click' )"
+          >
+            Add Image
+          </button>
+        
+          <div class="image-upload-wrap">
+            <input
+              class="file-upload-input"
+              type="file"
+              onchange="readURL(this);"
+              accept="image/*"
+              name = 'file'
+            />
+            <div class="drag-text">
+              <h3>Drag and drop an Image</h3>
+            </div>
+          </div>
+          <div class="file-upload-content">
+            <img class="file-upload-image" src="#" alt="your image" />
+            <div class="image-title-wrap">
+              <button type="button" onclick="removeUpload()" class="remove-image">
+                Remove <span class="image-title">Uploaded Image</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <center>
+              <div class="mt-5 ">
+              <input type="submit" value='predict' class="pred-btn">
+            </div>  
+          </center>
+          </div>
+        </center>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <center>
+
+  <div style="width: 500px" >
+      {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          
+              {% for message in messages %}
+              <p class="alert alert-danger">{{ message }}</p>
+              {% endfor %}
+          
+          {% endif %}
+      {% endwith %}
+  </div>
+</center>
+<center>
+  {% if result %}
+  <div >
+    <h3>Result</h3>
+  <h4>Classified as : {{result}}</h4>
+  </div>
+
+
+  <div class='mt-3'>
+  <!-- <h3>Probability % </h3>
+  {% for c in pred %}
+
+    <h5>  {{c}} ({{pred[c]}}%)  </h5>
+
+  {% endfor %}
+  </div> -->
+  <img src="static/{{image}}">
+
+
+  {% endif %}
+</center>
+  {% endblock %}
