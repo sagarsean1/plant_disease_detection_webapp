@@ -9,6 +9,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import cv2
+import seaborn as sns
 
 
 UPLOAD_FOLDER = './static'
@@ -59,21 +60,16 @@ def predict():
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], 'img.jpg'))
         model = load_model('saved_model/plant_vgg19_model_weights.h5')
         outcome = model.predict(prepare('./static/img.jpg'))[0]
-        pred_dict = dict()
-
-        for i in range(len(plant_diseases)):
-            # print(class_list[i],round(outcome[0][i]*100,2))
-            pred_dict[plant_diseases[i]] = round(outcome[i]*100, 2)
         data = pd.Series(outcome, index=plant_diseases)
         predict = np.argmax(outcome)
         disease = plant_diseases[predict]
         image_name = disease+'.png'
-        plt.figure(figsize=(6, 4))
-        data.sort_values().plot.barh()
+        plt.figure(figsize=(13, 9))
+        sns.barplot(x=data.values, y=data.index)
         plt.title('Predicted probability % of diseases')
         plt.savefig('static/'+image_name)
 
-    return render_template('index.html', result=disease, pred=pred_dict, image=image_name)
+    return render_template('index.html', result=disease, image=image_name)
 
 
 def prepare(image):
