@@ -71,7 +71,6 @@ def predict():
         plt.figure(figsize=(6, 4))
         data.sort_values().plot.barh()
         plt.title('Predicted probability % of diseases')
-        plt.legend()
         plt.savefig('static/'+image_name)
 
     return render_template('index.html', result=disease, pred=pred_dict, image=image_name)
